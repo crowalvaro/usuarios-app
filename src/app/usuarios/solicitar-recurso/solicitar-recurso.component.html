@@ -1,0 +1,25 @@
+<table *ngIf="recursos.length>0" class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <td>Usuario</td>
+      <td>ID</td>
+      <td>Estado</td>
+      <td>Descarga</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let recurso of recursos">
+      <td>{{ recurso.usuario }}</td>
+      <td>{{ recurso.idRecurso}}</td>
+      <td>{{ recurso.estado }}</td>
+      <td *ngIf="recurso.ruta">
+        <a (click)="descargar(recurso.ruta)">
+          <div class="iconosOperaciones">
+            <img src="./assets/512x512/descargar.png" alt="ico_descargar">
+          </div>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+
+</table>

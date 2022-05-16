@@ -1,0 +1,33 @@
+<div class="card bg-dark text-white">
+    <div class="card-header">{{ titulo }}</div>
+    <div class="card-body" *ngIf="usuario">
+
+      <!-- Ver la imagen si tiene -->
+      <div class="col-sm w-20" >
+        <img *ngIf="usuario?.foto"src="http://localhost:8080/api/uploads/img/{{usuario.foto}}" alt="foto" class="img-thumbnail rounded" width="304" height="236">
+      </div>
+
+          <div class="input-group">
+                <div class="custom-file">
+                  <!-- debe ser $event obligatoriamente -->
+                    <input (change)=seleccionarFoto($event) type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" >
+                </div>
+
+                <div class="input-group-append">
+                  <button (click)="subirFoto()" class="btn btn-outline-secondary" type="button" id=inputGroupFileAddon04>Subir foto</button>
+
+                </div>
+            </div>
+
+        <div>
+          <ul class="list-group">
+            <li class="list-group-item"><span>Nick:</span> {{usuario.nick}}</li>
+            <li class="list-group-item"><span>Nombre:</span> {{usuario.nombre}}</li>
+            <li class="list-group-item"><span>Apellidos</span> {{usuario.apellidos}}</li>
+            <li class="list-group-item"><span>Correo electronico:</span> {{usuario.email}}</li>
+            <li class="list-group-item"><span>Fecha de nacimiento: </span> {{usuario.fecha_nac | date:"dd/MM/yyyy"}}</li>
+          </ul>
+        </div>
+
+    </div>
+</div>

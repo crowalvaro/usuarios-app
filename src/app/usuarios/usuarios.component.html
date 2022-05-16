@@ -1,0 +1,73 @@
+<div class="card border-primary mb-3">
+  <div class="card-header">Usuarios</div>
+  <div class="card-body text-primary">
+    <h5 class="card-title">Crud de usuarios</h5>
+    <button type="button" name="button" [routerLink]="['/usuarios/form']">
+      <div class="iconosOperaciones">
+        <img src="./assets/512x512/crear.png" alt="ico_crear">
+      </div>
+    </button>
+
+    <button *ngIf="usuarios" type="button" name="button" (click)='descargarExcel()'>
+      <div class="iconosOperaciones">
+        <img src="./assets/iconosDescarga/excel.png" alt="ico_excel">
+      </div>
+    </button>
+
+    <!-- Si no llegan -->
+    <div *ngIf="usuarios.length == 0" class="alert alert-info">
+      <span>No hay datos en la tabla Usuarios</span>
+    </div>
+    <!-- Filtrado -->
+    <usuarios-filtrado></usuarios-filtrado>
+    <!-- Para que que muestre la tabla si llegan los datos desde el backend -->
+    <table class="table table-bordered table-striped" *ngIf="usuarios.length>0">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>nick</th>
+          <th>nombre</th>
+          <th>apellido</th>
+          <th>email</th>
+          <th>fecha nacimiento</th>
+          <th>foto</th>
+          <th *ngIf="authService.tieneRole('ROLE_ADMIN')">operaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>{{ usuario.idUsuario }}</td>
+          <td>{{ usuario.nick }}</td>
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellidos }}</td>
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.fecha_nac}}</td>
+          <td>{{ usuario.foto }}</td>
+          <td *ngIf="authService.tieneRole('ROLE_ADMIN')" class="operacionesCrud">
+            <a [routerLink]="['/usuarios/ver', usuario.idUsuario]">
+              <div class="iconosOperaciones">
+                <img src="./assets/512x512/ver.png" alt="ico_ver">
+              </div>
+            </a>
+            <a [routerLink]="['/usuarios/form', usuario.idUsuario]">
+              <div class="iconosOperaciones">
+                <img src="./assets/512x512/modificar.png" alt="ico_modificar">
+              </div>
+            </a>
+            <a (click)='delete(usuario)'>
+              <div class="iconosOperaciones">
+                <img src="./assets/512x512/borrar.png" alt="ico_borrar">
+              </div>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <paginator-nav *ngIf="paginador" [paginador] = "paginador"></paginator-nav>
+  </div>
+
+  <div class="recursos">
+      <solicitar-recurso></solicitar-recurso>
+  </div>
+
+</div>

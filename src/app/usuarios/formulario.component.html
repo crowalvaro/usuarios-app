@@ -1,0 +1,107 @@
+<ul class="alert alert-danger" *ngIf="errores.length>0">
+  <li *ngFor="let err of errores">
+    {{ err }}
+  </li>
+</ul>
+<div class="card bg-dark text-white">
+  <div class="card-header" *ngIf="!usuario.idUsuario else modificarBlock">{{titulo}}</div>
+  <ng-template #modificarBlock>Modificar Usuario</ng-template>
+  <div class="card-body">
+    <form #usuarioForm='ngForm'>
+
+      <div class="form-group row">
+        <label for="nick" class="col-form-label col-sm-2">Nick: </label>
+        <div class="col-sm 6">
+          <!-- Dejo esta validacion en el cliente para ver la validacion del cliente -->
+          <input type="text" class="form-control" [(ngModel)]="usuario.nick" name="nick" required minlength="4" #nick='ngModel'>
+
+          <!--
+          dirty=a medida que escribimos
+          touched = cuando pierde el foco
+          -->
+
+        <div class="alert alert-danger" *ngIf="nick.invalid && (nick.dirty || nick.touched)">
+            <!-- Para evitar posibles nulos ?. -->
+                 <div *ngIf="nick.errors?.['required']">
+                  Nick es requerido
+              </div>
+              <div *ngIf="nick.errors?.['minlength']">
+                  El nick debe tener al menos 4 caracteres
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="nombre" class="col-form-label col-sm-2">Nombre: </label>
+        <div class="col-sm 6">
+          <input type="text" class="form-control" [(ngModel)]="usuario.nombre" name="nombre"> <!-- required minlength="4" #nombre='ngModel'>-->
+            <!-- <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+
+                <div *ngIf="nombre.errors?.['required']">
+                    Nombre es requerido
+                </div>
+                <div *ngIf="nombre.errors?.['minlength']">
+                    El nombre debe tener al menos 4 caracteres
+                </div>
+            </div> -->
+
+        </div>
+      </div>
+
+      <div class="form-group row" >
+        <label for="apellidos" class="col-form-label col-sm-2">Apellidos: </label>
+        <div class="col-sm 6">
+          <input type="text" class="form-control" [(ngModel)]="usuario.apellidos" name="apellidos" ><!--required minlength="10" #apellidos='ngModel'>-->
+            <!-- <div class="alert alert-danger" *ngIf="apellidos.invalid && (apellidos.dirty || apellidos.touched)">
+
+                <div *ngIf="apellidos.errors?.['required']">
+                    Los apellidos son requeridos
+                </div>
+                <div *ngIf="apellidos.errors?.['minlength']">
+                    Los apellidos deben tener minimo 10 caracteres
+                </div>
+            </div> -->
+        </div>
+      </div>
+
+      <div class="form-group row" >
+        <label for="fecha_nac" class="col-form-label col-sm-2">Fecha de nacimiento: </label>
+        <div class="col-sm 6">
+          <input type="date" class="form-control" [(ngModel)]="usuario.fecha_nac" name="fecha_nac">
+        </div>
+      </div>
+
+      <div class="form-group row" >
+        <label for="email" class="col-form-label col-sm-2">email: </label>
+        <div class="col-sm 6">
+          <input type="email" class="form-control" [(ngModel)]="usuario.email" name="email">
+        </div>
+      </div>
+
+      <!-- Ver la imagen si tiene -->
+      <div class="col-sm w-20">
+        <img  [src]="url" alt="foto" class="img-thumbnail rounded" width="304" height="236">
+
+      </div>
+
+          <div class="input-group">
+                <div class="custom-file">
+                  <!-- debe ser $event obligatoriamente -->
+                    <input (change)=seleccionarFoto($event) type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" >
+                </div>
+            </div>
+
+      <div class="form-group row" >
+          <div class="col-sm 6">
+              <!--  hay que usar ?[''] para todos los ng propios -->
+                <button type="submit" class="btn btn-primary" role="button" name="button" (click)='create()' *ngIf="!usuario.idUsuario else elseBlock" [disabled]="!usuarioForm?.['form']?.['valid']">Crear</button>
+          <ng-template #elseBlock>
+                <button type="submit" class="btn btn-primary" role="button" name="button" (click)='update()' [disabled]="!usuarioForm?.['form']?.['valid']">Modificar</button>
+          </ng-template>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
