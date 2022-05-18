@@ -11,16 +11,35 @@ import swal from 'sweetalert2';
 export class SolicitarRecursoComponent implements OnInit {
 
   public recursos:Recurso[]=[];
-
+  private recursosaux:Recurso[]=[];
   constructor(private usuarioService: UsuarioService) { }
 
   ngOnInit(): void {
-
+    let cont = 0;
     this.usuarioService.recursoExcel().subscribe(response =>
       {
-         //if(response.estado != "vacio"){
+        this.recursosaux=response as Recurso[];
+
+        //Sin terminar
+        let procesando=this.recursos.filter(recurso => recurso.estado.includes("Procesando"));
+
+        console.log(procesando)
+
+        for (let ob of procesando) {
+            let cambio=this.recursosaux.find(rec => rec.idRecurso.includes(ob.idRecurso))
+            console.log(cambio)
+            if(cambio?.estado.includes("Completado")){
+              swal.fire("Proceso","Se ha completado el proceso","success");
+            }
+        }if(procesando==undefined){
+          cont=0;
+        }
+
+
+        //swal.fire("Proceso","Se ha completado el proceso","success");
+
            this.recursos=response as Recurso[];
-           console.log(this.recursos);
+          // console.log(this.recursos);
          //}
     });
 
@@ -33,14 +52,12 @@ export class SolicitarRecursoComponent implements OnInit {
          swal.fire(response.mensaje,response.error,"error")
        }
        else{
-
-
         const binaryData=[]
         binaryData.push(response)
         const filePath = window.URL.createObjectURL(new Blob(binaryData, {type: response.type}))
         const descarga = document.createElement("a");
         descarga.href=filePath;
-        descarga.setAttribute("download",`excel${cod}.xlsx`)
+        descarga.setAttribute("download",`excel${cod}.zip`)
         document.body.appendChild(descarga);
         descarga.click();
       }
